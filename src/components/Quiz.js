@@ -77,7 +77,7 @@ class Quiz extends React.Component {
 
     const userAnswer = e.target.innerText;
     const lists = document.querySelectorAll("li");
-      
+
     if (userAnswer === correctAnswer) {
         e.target.classList.add("correct");
         // <p>{this.state.isCorrect}</p>
@@ -86,7 +86,7 @@ class Quiz extends React.Component {
             questionsCorrect: prevState.questionsCorrect + 1
             };
         });
-        
+
     } else {
         e.target.classList.add("incorrect");
         lists.forEach((list) => {
@@ -97,17 +97,31 @@ class Quiz extends React.Component {
     }
   }
   nextQuestion = () => {
+    const lists = document.querySelectorAll("li");
+
+    this.removeClasses(lists)
+
     this.setState((prevState) => {
-      return { 
+      return {
           ...this.state,
           currentQuestionIndex: prevState.currentQuestionIndex + 1,
           answerSelected: false
         };
     });
-    console.log(this.state,"state")
     // this.generateQuestion()
   };
 
+
+  removeClasses = (lists) => {
+    lists.forEach((list) => {
+        if (list.classList.contains("correct")) {
+            list.classList.remove("correct");
+        }
+        if(list.classList.contains("incorrect")){
+            list.classList.remove("incorrect")
+        }
+    })
+  }
   render() {
     console.log(this.state.quiz, "quiz")
     const {currentQuizIndex, answerSelected} = this.state
