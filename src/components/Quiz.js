@@ -12,6 +12,7 @@ class Quiz extends React.Component {
     isIncorrect: "Incorrect...",
     questionsCorrect: 0,
     quiz:{},
+    quizAttempts: {}
   };
 
   componentDidMount(){
@@ -57,9 +58,12 @@ class Quiz extends React.Component {
       if(currentQuestionIndex < questionsLength){
           return <button onClick={this.nextQuestion}>Next Question</button>
       } else if (currentQuestionIndex >= questionsLength && currentQuizIndex < quizzes.length - 1){
+            
             const message = getMessage()
-            return <p> {message}</p>
-            //&& <button>Next Quiz</button>}
+            return <div> 
+                {this.giveSummary()}
+                {message} <button>Next Quiz</button>
+                </div>
       } else {
           return <button>Retake</button>
           // this needs work - see Delighter
@@ -122,8 +126,16 @@ class Quiz extends React.Component {
         }
     })
   }
+
+  giveSummary(){
+      const {questionsCorrect, quiz} = this.state
+      const numberOfQuestions = quiz.questions.length 
+
+      return `You got ${questionsCorrect} of ${numberOfQuestions} right.`
+  }
+
   render() {
-    console.log(this.state.quiz, "quiz")
+    
     const {currentQuizIndex, answerSelected} = this.state
     const quiz = quizzes[currentQuizIndex]
     // const { currentQuestionIndex } = this.state;
