@@ -5,64 +5,72 @@ import Question from "./Question.js";
 
 class Quiz extends React.Component {
   state = {
-    currentQuizIndex: 0,
     currentQuestionIndex: 0,
-    answerSelected: false,
-    isCorrect: "Correct!",
-    isIncorrect: "Incorrect...",
+    isAnswerSelected: false,
     questionsCorrect: 0,
-    quiz:{},
-    quizAttempts: {}
+    quizAttempts: 0,
+    isCorrect: false,
+    shuffledAnswers: []
   };
 
-  componentDidMount(){
-      this.setState({
-          quiz: quizzes[this.state.currentQuizIndex],
-      })
-  }
-
-//   shouldComponentUpdate(nextState) {
-//     if (this.state.answerSelected === nextState.answerSelected) {
-//       return false;
-//     } else {
-//       return true;
-//     }
-//   }
 
   generateQuestion = () => {
-    const {currentQuizIndex, currentQuestionIndex} = this.state
-    const currentQuiz = quizzes[currentQuizIndex]
-    const currentQuestion = currentQuiz.questions[currentQuestionIndex];
-
+    const {questions} = this.props
+    const {currentQuestionIndex} = this.state
+    const currentQuestion = questions[currentQuestionIndex];
+    const answers = currentQuestion.incorrectAnswers.concat(currentQuestion.correctAnswer)
 
     return (
       <Question
+        id={currentQuestionIndex}
         text={currentQuestion.text}
         correctAnswer={currentQuestion.correctAnswer}
         incorrectAnswers={currentQuestion.incorrectAnswers}
-        currentQuestion={this.state.currentQuestionIndex}
-        questions={currentQuiz.questions}
-        answers={currentQuestion.incorrectAnswers.concat(
-          currentQuestion.correctAnswer)}
-        selectAnswer={this.selectAnswer}
+        currentQuestion={currentQuestionIndex}
+        quizLength={questions.length}
+        answers={answers}
+        shuffleAnswers={this.shuffleAnswers}
+        shuffled={this.state.shuffledAnswers}
+       checkAnswer={this.checkAnswer}
+
       />
     );
   };
 
-  renderButton = () => {
-      const {currentQuestionIndex, currentQuizIndex} = this.state;
-      const currentQuiz = quizzes[currentQuizIndex];
-      const questionsLength = currentQuiz.questions.length - 1;
+  shuffleAnswers = (answers) => {
+    let counter = answers.length;
+    
+    while (counter > 0) {
+        
+      let index = Math.floor(Math.random() * counter);
 
+      counter--;
+
+      let temp = answers[counter];
+
+      answers[counter] = answers[index];
+      answers[index] = temp;
+    }
+   
+    this.setState({
+        ...this.state,
+        shuffledAnswers: answers
+    })
+   
+  };
+
+  renderButton = () => {
+      const {currentQuestionIndex} = this.state;
+      const {questions, currentQuizIndex} = this.props
+      const questionsLength = questions.length - 1;
 
       if(currentQuestionIndex < questionsLength){
           return <button onClick={this.nextQuestion}>Next Question</button>
-      } else if (currentQuestionIndex >= questionsLength && currentQuizIndex < quizzes.length - 1){
-            
+      } else if (currentQuestionIndex >= questionsLength && currentQuizIndex < quizzes.length - 1){ 
             const message = getMessage()
-            return <div> 
-                {this.giveSummary()}
-                {message} <button>Next Quiz</button>
+            return <div>
+                {this.getSummary()}
+                {message} <button onClick={this.props.nextQuiz}>Next Quiz</button>
                 </div>
       } else {
           return <button>Retake</button>
@@ -70,50 +78,54 @@ class Quiz extends React.Component {
       }
   }
 
-  selectAnswer = (e) => {
-    const {quiz, currentQuestionIndex} = this.state
-    const currentQuestion = quiz.questions[currentQuestionIndex]
-    const correctAnswer = currentQuestion.correctAnswer
+ checkAnswer = (e) => { 
+     e.preventDefault()
+    const {questions} = this.props,
+          {currentQuestionIndex} = this.state,
+           currentQuestion = questions[currentQuestionIndex],
+           correctAnswer = currentQuestion.correctAnswer,
+           userAnswer = e.target.innerText,
+           lists = document.querySelectorAll("li")
 
-    this.setState({
-        answerSelected: true
-    });
-
-    const userAnswer = e.target.innerText;
-    const lists = document.querySelectorAll("li");
 
     if (userAnswer === correctAnswer) {
         e.target.classList.add("correct");
-        // <p>{this.state.isCorrect}</p>
         this.setState((prevState) => {
             return {
-            questionsCorrect: prevState.questionsCorrect + 1
+            ...this.state,
+            isAnswerSelected: true,
+            questionsCorrect: prevState.questionsCorrect + 1,
+            isCorrect: true
             };
         });
-
     } else {
         e.target.classList.add("incorrect");
         lists.forEach((list) => {
             if (list.innerText === this.props.correctAnswer) {
                 list.classList.add("correct");
             }
-        });
+        })
+        this.setState({
+            ...this.state,
+            isAnswerSelected: true
+        })
     }
   }
   nextQuestion = () => {
+     
     const lists = document.querySelectorAll("li");
 
     this.removeClasses(lists)
 
     this.setState((prevState) => {
-      return {
+        return {
           ...this.state,
           currentQuestionIndex: prevState.currentQuestionIndex + 1,
-          answerSelected: false
-        };
-    });
-    // this.generateQuestion()
-  };
+          isAnswerSelected: false,
+          isCorrect: false,
+        }
+      });
+    }
 
 
   removeClasses = (lists) => {
@@ -127,27 +139,71 @@ class Quiz extends React.Component {
     })
   }
 
-  giveSummary(){
-      const {questionsCorrect, quiz} = this.state
-      const numberOfQuestions = quiz.questions.length 
+  getSummary(){
+      const {questions} = this.props,
+            {questionsCorrect} = this.state,
+            numberOfQuestions = questions.length 
 
       return `You got ${questionsCorrect} of ${numberOfQuestions} right.`
   }
 
+//   getQuizAttempts = (quizIndex) => {
+//       const {quizAttempts} = this.state
+
+//       if(!quizAttempts[quizIndex]){
+//         this.setState({
+//             quizAttempts:{
+//                 [quizIndex]: 1
+//             }
+//         }); 
+//       } else {
+//           this.setState((prevState) => {
+//               return{
+//                   quizAttempts:{
+//                     [quizIndex]: prevState.quizIndex += 1
+//                   }
+//               }
+//           })
+//       }
+//   }
+
   render() {
-    
-    const {currentQuizIndex, answerSelected} = this.state
-    const quiz = quizzes[currentQuizIndex]
+    const {title} = this.props
+    const {isAnswerSelected, isCorrect} = this.state
+    let button
+    let answerStatus
     // const { currentQuestionIndex } = this.state;
-    // console.log(quizzes[this.state.currentQuizIndex], "quiz at index")
+
+    if(isAnswerSelected){
+        button = this.renderButton()
+        if(isCorrect){
+            answerStatus = "Correct!"
+        } else {
+            answerStatus = "Incorrect..."
+        }
+    } else {
+        button = null
+    }
+
     return (
       <div>
-        <h1>{quiz.title}</h1>
+        <h1>{title}</h1>
+
         {this.generateQuestion()}
-        {answerSelected ? this.renderButton() : null}
+        {answerStatus}
+        {button}
+        {/* if({isAnswerSelected}) {
+            if({isCorrect}){
+                "Correct!"
+            } else {
+                
+            }
+        } && isCorrect ? "Correct!" : "Incorrect..."}
+        {isAnswerSelected ? this.renderButton() : null} */}
       </div>
     );
   }
 }
+
 
 export default Quiz;

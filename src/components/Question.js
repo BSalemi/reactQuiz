@@ -2,44 +2,35 @@ import React from 'react';
 
 class Question extends React.Component {
   
+    state={
+        correctAnswer: this.props.correctAnswer,
+        incorrectAnswers: this.props.incorrectAnswers,
+        answers: []
+    }
 
-    shuffleAnswers = () => {
-      const {answers} = this.props
-      let counter = answers.length;
-  
-      while (counter > 0) {
-        let index = Math.floor(Math.random() * counter);
-  
-        counter--;
-  
-        let temp = answers[counter];
-  
-        answers[counter] = answers[index];
-        answers[index] = temp;
-      }
-  
-      return answers;
-    };
-  
-    generateAnswers = (answersArray) => {
-      const answers = answersArray.map((answer) => {
-        return <li onClick={(event) => this.props.selectAnswer(event)}>{answer}</li>
+    componentDidMount(){
+        const {shuffleAnswers, answers} = this.props
+        this.setState({
+            answers: shuffleAnswers(answers)
+        })
+    }
+
+    generateAnswers = () => {
+      const answers = this.props.answers.map((answer) => {
+        return <li onClick={(event) => this.props.checkAnswer(event)}>{answer}</li>
         })
       return answers;
     };
-  
-    // 
-  
-    // removeClasses = ()
+
     render() {
       const {text} = this.props;
-      const answers = this.shuffleAnswers()
+     
       // const { answerSelected, questionStatus } = this.state;
       return (
         <div>
           <h3> {text}</h3>
           
-          <ol type="A">{this.generateAnswers(answers)}</ol>
+          <ol type="A">{this.generateAnswers()}</ol>
           {/* {currentQuestion < questions.length - 1 && answerSelected ? (
             <>
               {questionStatus ? <p>Correct!</p> : <p>Incorrect...</p>}
