@@ -8,7 +8,7 @@ class Quiz extends React.Component {
     currentQuestionIndex: 0,
     isAnswerSelected: false,
     questionsCorrect: 0,
-    quizAttempts: 0,
+    quizAttempts: 1,
     isCorrect: false,
     shuffledAnswers: []
   };
@@ -17,12 +17,25 @@ class Quiz extends React.Component {
   generateQuestion = () => {
     const {questions} = this.props
     const {currentQuestionIndex} = this.state
+
+    if(currentQuestionIndex > questions.length-1){
+        this.setState({
+            ...this.state,
+            currentQuestionIndex: 0,
+            isAnswerSelected: false,
+            questionsCorrect: 0,
+            isCorrect: false,
+            shuffledAnswers: []
+        })
+        return this.generateQuestion
+    }
+
     const currentQuestion = questions[currentQuestionIndex];
     const answers = currentQuestion.incorrectAnswers.concat(currentQuestion.correctAnswer)
 
     return (
       <Question
-        id={currentQuestionIndex}
+        key={currentQuestionIndex}
         text={currentQuestion.text}
         correctAnswer={currentQuestion.correctAnswer}
         incorrectAnswers={currentQuestion.incorrectAnswers}
@@ -31,8 +44,7 @@ class Quiz extends React.Component {
         answers={answers}
         shuffleAnswers={this.shuffleAnswers}
         shuffled={this.state.shuffledAnswers}
-       checkAnswer={this.checkAnswer}
-
+        checkAnswer={this.checkAnswer}
       />
     );
   };
@@ -60,6 +72,7 @@ class Quiz extends React.Component {
   };
 
   renderButton = () => {
+      const message = getMessage()
       const {currentQuestionIndex} = this.state;
       const {questions, currentQuizIndex} = this.props
       const questionsLength = questions.length - 1;
@@ -67,13 +80,19 @@ class Quiz extends React.Component {
       if(currentQuestionIndex < questionsLength){
           return <button onClick={this.nextQuestion}>Next Question</button>
       } else if (currentQuestionIndex >= questionsLength && currentQuizIndex < quizzes.length - 1){ 
-            const message = getMessage()
-            return <div>
-                {this.getSummary()}
-                {message} <button onClick={this.props.nextQuiz}>Next Quiz</button>
+            return (
+                <div>
+                    {this.getSummary()}
+                    {message} 
+                    <button onClick={this.props.nextQuiz}>Next Quiz</button><button>Retake</button>
                 </div>
+                )
       } else {
-          return <button>Retake</button>
+          return <div>
+              {this.getSummary()}
+              {message}
+              <button>Retake</button><button>Back to First Quiz</button>
+              </div>
           // this needs work - see Delighter
       }
   }

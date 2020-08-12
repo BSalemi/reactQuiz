@@ -5,18 +5,15 @@ class Question extends React.Component {
     state={
         correctAnswer: this.props.correctAnswer,
         incorrectAnswers: this.props.incorrectAnswers,
-        answers: []
     }
 
     componentDidMount(){
         const {shuffleAnswers, answers} = this.props
-        this.setState({
-            answers: shuffleAnswers(answers)
-        })
+        shuffleAnswers(answers)
     }
 
     generateAnswers = () => {
-      const answers = this.props.answers.map((answer) => {
+      const answers = this.props.shuffled.map((answer) => {
         return <li onClick={(event) => this.props.checkAnswer(event)}>{answer}</li>
         })
       return answers;
