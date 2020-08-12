@@ -16,7 +16,7 @@ class Quiz extends React.Component {
 
   generateQuestion = () => {
     const {questions} = this.props
-    const {currentQuestionIndex} = this.state
+    let {currentQuestionIndex} = this.state
 
     if(currentQuestionIndex > questions.length-1){
         this.setState({
@@ -27,7 +27,7 @@ class Quiz extends React.Component {
             isCorrect: false,
             shuffledAnswers: []
         })
-        return this.generateQuestion
+        currentQuestionIndex = 0
     }
 
     const currentQuestion = questions[currentQuestionIndex];
@@ -73,7 +73,7 @@ class Quiz extends React.Component {
 
   renderButton = () => {
       const message = getMessage()
-      const {currentQuestionIndex} = this.state;
+      const {currentQuestionIndex, quizAttempts} = this.state;
       const {questions, currentQuizIndex} = this.props
       const questionsLength = questions.length - 1;
 
@@ -83,15 +83,17 @@ class Quiz extends React.Component {
             return (
                 <div>
                     {this.getSummary()}
-                    {message} 
-                    <button onClick={this.props.nextQuiz}>Next Quiz</button><button>Retake</button>
+                    {message}
+                    This was attempt number {quizAttempts}.
+                    <button onClick={this.props.nextQuiz}>Next Quiz</button><button onClick={this.retakeQuiz}>Retake</button>
                 </div>
                 )
       } else {
           return <div>
               {this.getSummary()}
               {message}
-              <button>Retake</button><button>Back to First Quiz</button>
+              This was attempt number {quizAttempts}.
+              <button onClick={this.retakeQuiz}>Retake</button><button>Back to First Quiz</button>
               </div>
           // this needs work - see Delighter
       }
@@ -146,6 +148,20 @@ class Quiz extends React.Component {
       });
     }
 
+    retakeQuiz = () => {
+        console.log(this.state, "state")
+        this.setState((prevState)=>{
+            return {
+                currentQuestionIndex: 0,
+                isAnswerSelected: false,
+                questionsCorrect: 0,
+                quizAttempts: prevState.quizAttempts + 1,
+                isCorrect: false,
+                shuffledAnswers: []
+            }
+        })
+        console.log(this.state, "state after")
+    }
 
   removeClasses = (lists) => {
     lists.forEach((list) => {

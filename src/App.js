@@ -13,7 +13,7 @@ class App extends React.Component{
     const {currentQuizIndex} = this.state
     const currentQuiz = quizzes[currentQuizIndex]
 
-    return <Quiz title={currentQuiz.title} questions={currentQuiz.questions} currentQuizIndex={currentQuizIndex} nextQuiz={this.nextQuiz} />
+    return <Quiz key={currentQuizIndex} title={currentQuiz.title} questions={currentQuiz.questions} currentQuizIndex={currentQuizIndex} nextQuiz={this.nextQuiz} />
   }
 
   nextQuiz = () =>{
@@ -24,9 +24,7 @@ class App extends React.Component{
     })
   }
 
-  resetState = () =>{
-
-  }
+ 
   render(){
     return (
       <div className="App">
