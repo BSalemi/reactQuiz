@@ -14,7 +14,7 @@ class Question extends React.Component {
 
     generateAnswers = () => {
       const answers = this.props.shuffled.map((answer) => {
-        return <li onClick={(event) => this.props.checkAnswer(event)}>{answer}</li>
+        return <li className="answer" onClick={(event) => this.props.checkAnswer(event)}>{answer}</li>
         })
       return answers;
     };

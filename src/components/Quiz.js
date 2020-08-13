@@ -73,35 +73,37 @@ class Quiz extends React.Component {
  checkAnswer = (e) => { 
      e.preventDefault()
     const {questions} = this.props,
-          {questionIndex} = this.state,
+          {questionIndex, isAnswerSelected} = this.state,
            currentQuestion = questions[questionIndex],
            correctAnswer = currentQuestion.correctAnswer,
            userAnswer = e.target.innerText,
            lists = document.querySelectorAll("li")
 
-
-    if (userAnswer === correctAnswer) {
-        e.target.classList.add("correct");
-        this.setState((prevState) => {
-            return {
-            ...this.state,
-            isAnswerSelected: true,
-            questionsCorrect: prevState.questionsCorrect + 1,
-            isCorrect: true
-            };
-        });
-    } else {
-        e.target.classList.add("incorrect");
-        lists.forEach((list) => {
-            if (list.innerText === this.props.correctAnswer) {
-                list.classList.add("correct");
-            }
-        })
-        this.setState({
-            ...this.state,
-            isAnswerSelected: true
-        })
+    if(isAnswerSelected === false){
+        if (userAnswer === correctAnswer) {
+            e.target.classList.add("correct");
+            this.setState((prevState) => {
+                return {
+                ...this.state,
+                isAnswerSelected: true,
+                questionsCorrect: prevState.questionsCorrect + 1,
+                isCorrect: true
+                };
+            });
+        } else {
+            e.target.classList.add("incorrect");
+            lists.forEach((list) => {
+                if (list.innerText === this.props.correctAnswer) {
+                    list.classList.add("correct");
+                }
+            })
+            this.setState({
+                ...this.state,
+                isAnswerSelected: true
+            })
+        }
     }
+    
   }
 
   nextQuestion = () => {
@@ -122,15 +124,13 @@ class Quiz extends React.Component {
     }
 
     retakeQuiz = () => {
-        this.setState((prevState)=>{
-            return {
+        this.props.updateQuizAttempts()
+        this.setState({
                 questionIndex: 0,
                 isAnswerSelected: false,
                 questionsCorrect: 0,
-                quizAttempts: prevState.quizAttempts + 1,
                 isCorrect: false,
                 shuffledAnswers: []
-            }
         })
     }
 

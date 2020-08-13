@@ -7,15 +7,21 @@ class App extends React.Component{
 
   state = {
     quizIndex: 0,
-    quizAttempts: 1
-  }
+    quizAttempts: {}
+    }
+
+    componentDidMount() {
+      const attempts = { [this.state.quizIndex]: 1 }
+      this.setState({ ...this.state, quizAttempts: { ...attempts } })
+    }
 
   generateQuiz = () => {
-    const {quizIndex, quizAttempts} = this.state,
+    const {quizIndex}= this.state,
           currentQuiz = quizzes[quizIndex],
-          quizzesLength = quizzes.length
+          quizzesLength = quizzes.length,
+          quizAttempts = this.state.quizAttempts[quizIndex]
 
-    return <Quiz key={quizIndex} title={currentQuiz.title} questions={currentQuiz.questions} quizIndex={quizIndex} quizAttempts={quizAttempts} nextQuiz={this.nextQuiz} firstQuiz={this.firstQuiz} quizzesLength={quizzesLength}/>
+    return <Quiz key={quizIndex} title={currentQuiz.title} questions={currentQuiz.questions} quizIndex={quizIndex} quizAttempts={quizAttempts} nextQuiz={this.nextQuiz} firstQuiz={this.firstQuiz} quizzesLength={quizzesLength} updateQuizAttempts={this.updateQuizAttempts}/>
   }
 
   nextQuiz = () =>{
@@ -25,6 +31,7 @@ class App extends React.Component{
         quizIndex: prevState.quizIndex + 1
       }
     })
+    this.updateQuizAttempts()
   }
 
   firstQuiz = () => {
@@ -32,17 +39,26 @@ class App extends React.Component{
         ...this.state,
         quizIndex: 0
     })
+    this.updateQuizAttempts()
   }
 
+  updateQuizAttempts = () => {
+    this.setState(prevState => {
+      const prevAttempts = prevState.quizAttempts[prevState.quizIndex] || 0;
+      return {
+        quizAttempts: { ...prevState.quizAttempts, [prevState.quizIndex]: prevAttempts + 1 }
+      }
+    })
+  }
  
   render(){
+    console.log(this.state.quizAttempts[this.state.quizIndex], "quizAttempts?")
     return (
       <div className="App">
         {this.generateQuiz()}
       </div>
     );
   }
-
 }
   
 

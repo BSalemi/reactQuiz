@@ -44,6 +44,9 @@ code {
   width: 60%;
   margin: 0 auto
 }
+.answer{
+  cursor: pointer;
+}
 
 .answerList{
   width:60%;
