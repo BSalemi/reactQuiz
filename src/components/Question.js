@@ -19,24 +19,19 @@ class Question extends React.Component {
       return answers;
     };
 
+
     render() {
       const {text} = this.props;
-     
-      // const { answerSelected, questionStatus } = this.state;
+
       return (
-        <div>
+        <div className="questionsDiv">
           <h3> {text}</h3>
-          
-          <ol type="A">{this.generateAnswers()}</ol>
-          {/* {currentQuestion < questions.length - 1 && answerSelected ? (
-            <>
-              {questionStatus ? <p>Correct!</p> : <p>Incorrect...</p>}
-              <button onClick={nextQuestion}>Next Question</button>
-            </>
-          ) : null} */} 
+
+          <ol type="A" className="answerList">{this.generateAnswers()}</ol>
+
         </div>
       );
     }
   }
-  
+
   export default Question;

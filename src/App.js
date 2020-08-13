@@ -6,21 +6,31 @@ import {quizzes} from './data/quizzes.js'
 class App extends React.Component{
 
   state = {
-    currentQuizIndex: 0
+    quizIndex: 0,
+    quizAttempts: 1
   }
 
   generateQuiz = () => {
-    const {currentQuizIndex} = this.state
-    const currentQuiz = quizzes[currentQuizIndex]
+    const {quizIndex, quizAttempts} = this.state,
+          currentQuiz = quizzes[quizIndex],
+          quizzesLength = quizzes.length
 
-    return <Quiz key={currentQuizIndex} title={currentQuiz.title} questions={currentQuiz.questions} currentQuizIndex={currentQuizIndex} nextQuiz={this.nextQuiz} />
+    return <Quiz key={quizIndex} title={currentQuiz.title} questions={currentQuiz.questions} quizIndex={quizIndex} quizAttempts={quizAttempts} nextQuiz={this.nextQuiz} firstQuiz={this.firstQuiz} quizzesLength={quizzesLength}/>
   }
 
   nextQuiz = () =>{
     this.setState((prevState) => {
       return{
-        currentQuizIndex: prevState.currentQuizIndex + 1
+        ...this.state,
+        quizIndex: prevState.quizIndex + 1
       }
+    })
+  }
+
+  firstQuiz = () => {
+    this.setState({
+        ...this.state,
+        quizIndex: 0
     })
   }
 
