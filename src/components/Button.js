@@ -40,9 +40,12 @@ function Button(props){
 
      return(
          <div>
-        <h4 className="answerResult">{isCorrect ? "Correct!" : "Incorrect..."}</h4> 
+        
         {questionIndex < questionsLength - 1 ? ( 
+        <>
+        <h4 className="answerResult">{isCorrect ? "Correct!" : "Incorrect..."}</h4> 
          <button onClick={nextQuestion}>Next Question</button> 
+         </>
        ) : (
             <div className="summary">
                 {toggleVisibility()}
