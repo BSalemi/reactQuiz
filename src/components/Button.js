@@ -2,19 +2,19 @@ import React from 'react';
 import {getMessage} from '../data/messages.js'
 
 function Button(props){
-    const { 
-        nextQuestion, 
-        nextQuiz, 
-        retakeQuiz, 
-        questionsCorrect, 
-        questionIndex, 
-        firstQuiz, 
-        questionsLength, 
-        quizIndex, 
-        quizAttempts, 
-        isCorrect, 
-        quizzesLength, 
-        toggleVisibility 
+    const {
+        firstQuiz,
+        isCorrect,
+        nextQuestion,
+        nextQuiz,
+        questionsCorrect,
+        questionIndex,
+        questionsLength,
+        quizAttempts,
+        quizIndex,
+        quizzesLength,
+        retakeQuiz,
+        toggleVisibility
      } = props;
 
       let buttons
@@ -40,12 +40,12 @@ function Button(props){
 
      return(
          <div>
-        
-        {questionIndex < questionsLength - 1 ? ( 
+
+        {questionIndex < questionsLength - 1 ? (
         <>
-        <h4 className="answerResult">{isCorrect ? "Correct!" : "Incorrect..."}</h4> 
-         <button onClick={nextQuestion}>Next Question</button> 
-         </>
+            <h4 className="answerResult">{isCorrect ? "Correct!" : "Incorrect..."}</h4>
+            <button onClick={nextQuestion}>Next Question</button>
+        </>
        ) : (
             <div className="summary">
                 {toggleVisibility()}

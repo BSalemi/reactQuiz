@@ -1,7 +1,7 @@
 import React from 'react';
 
 class Question extends React.Component {
-  
+
     state={
         correctAnswer: this.props.correctAnswer,
         incorrectAnswers: this.props.incorrectAnswers,

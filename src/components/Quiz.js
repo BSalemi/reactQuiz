@@ -35,23 +35,19 @@ class Quiz extends React.Component {
       <Question
         key={questionIndex}
         text={currentQuestion.text}
+        answers={answers}
+        checkAnswer={this.checkAnswer}
         correctAnswer={currentQuestion.correctAnswer}
         incorrectAnswers={currentQuestion.incorrectAnswers}
-        currentQuestion={questionIndex}
-        quizLength={questions.length}
-        answers={answers}
         shuffleAnswers={this.shuffleAnswers}
         shuffled={this.state.shuffledAnswers}
-        checkAnswer={this.checkAnswer}
       />
     );
   };
 
   shuffleAnswers = (answers) => {
     let counter = answers.length;
-    
     while (counter > 0) {
-        
       let index = Math.floor(Math.random() * counter);
 
       counter--;
@@ -61,17 +57,14 @@ class Quiz extends React.Component {
       answers[counter] = answers[index];
       answers[index] = temp;
     }
-   
     this.setState({
         ...this.state,
         shuffledAnswers: answers
     })
-   
   };
 
-//   
- checkAnswer = (e) => { 
-     e.preventDefault()
+
+checkAnswer = (e) => {
     const {questions} = this.props,
           {questionIndex, isAnswerSelected} = this.state,
            currentQuestion = questions[questionIndex],
@@ -103,7 +96,6 @@ class Quiz extends React.Component {
             })
         }
     }
-    
   }
 
   nextQuestion = () => {
@@ -148,7 +140,7 @@ class Quiz extends React.Component {
   getSummary(){
       const {questions} = this.props,
             {questionsCorrect} = this.state,
-            numberOfQuestions = questions.length 
+            numberOfQuestions = questions.length
 
       return `You got ${questionsCorrect} of ${numberOfQuestions} right.`
   }
@@ -162,8 +154,20 @@ toggleVisibility = () =>{
 
 
   render() {
-    const {title, questions, quizzesLength, quizIndex, quizAttempts} = this.props
-    const {isAnswerSelected, isCorrect, questionIndex, questionsCorrect} = this.state
+    const {
+        title,
+        questions,
+        quizzesLength,
+        quizIndex,
+        quizAttempts
+    } = this.props
+
+    const {
+        isAnswerSelected,
+        isCorrect,
+        questionIndex,
+        questionsCorrect
+    } = this.state
 
     return (
       <div className="quizDiv">
@@ -172,7 +176,22 @@ toggleVisibility = () =>{
         {this.generateQuestion()}
 
         {isAnswerSelected ?
-        (<Button nextQuiz={this.props.nextQuiz} nextQuestion={this.nextQuestion} retakeQuiz={this.retakeQuiz} firstQuiz={this.props.firstQuiz} questionIndex={questionIndex} questionsLength={questions.length} questionsCorrect={questionsCorrect} isCorrect={isCorrect} quizAttempts={quizAttempts} quizIndex={quizIndex} quizzesLength={quizzesLength} toggleVisibility={this.toggleVisibility} isAnswerSelected={isAnswerSelected}/>) : null}
+        (
+        <Button
+            firstQuiz={this.props.firstQuiz}
+            isAnswerSelected={isAnswerSelected}
+            nextQuestion={this.nextQuestion}
+            nextQuiz={this.props.nextQuiz}
+            questionIndex={questionIndex}
+            questionsLength={questions.length}
+            questionsCorrect={questionsCorrect} isCorrect={isCorrect}
+            quizAttempts={quizAttempts}
+            quizIndex={quizIndex}
+            quizzesLength={quizzesLength}
+            retakeQuiz={this.retakeQuiz}
+            toggleVisibility={this.toggleVisibility}
+        />
+        ) : null}
 
       </div>
     );
@@ -181,3 +200,5 @@ toggleVisibility = () =>{
 
 
 export default Quiz;
+
+

@@ -21,7 +21,19 @@ class App extends React.Component{
           quizzesLength = quizzes.length,
           quizAttempts = this.state.quizAttempts[quizIndex]
 
-    return <Quiz key={quizIndex} title={currentQuiz.title} questions={currentQuiz.questions} quizIndex={quizIndex} quizAttempts={quizAttempts} nextQuiz={this.nextQuiz} firstQuiz={this.firstQuiz} quizzesLength={quizzesLength} updateQuizAttempts={this.updateQuizAttempts}/>
+    return (
+      <Quiz
+        key={quizIndex}
+        title={currentQuiz.title}
+        questions={currentQuiz.questions}
+        firstQuiz={this.firstQuiz}
+        nextQuiz={this.nextQuiz}
+        quizAttempts={quizAttempts}
+        quizIndex={quizIndex}
+        quizzesLength={quizzesLength}
+        updateQuizAttempts={this.updateQuizAttempts}
+      />
+    )
   }
 
   nextQuiz = () =>{
@@ -50,9 +62,8 @@ class App extends React.Component{
       }
     })
   }
- 
+
   render(){
-    console.log(this.state.quizAttempts[this.state.quizIndex], "quizAttempts?")
     return (
       <div className="App">
         {this.generateQuiz()}
@@ -60,6 +71,6 @@ class App extends React.Component{
     );
   }
 }
-  
+
 
 export default App;

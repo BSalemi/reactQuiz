@@ -16,7 +16,6 @@ code {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* width: 100% */
 }
 
 .correct {
@@ -29,7 +28,6 @@ code {
 }
 
 .quizDiv{
- border:black 1px solid;
  text-align:center;
 }
 
@@ -40,16 +38,16 @@ code {
 
 .questionsDiv{
   text-align: center;
-  border: 2px solid black;
-  width: 60%;
-  margin: 0 auto
+  width: 85%;
+  margin: 0 auto;
+  max-width: 600px;
 }
 .answer{
   cursor: pointer;
 }
 
 .answerList{
-  width:60%;
+  width:85%;
   text-align: left;
   list-style-position: inside;
 }
