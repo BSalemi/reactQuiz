@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {getMessage} from '../data/messages.js'
 
 function Button(props){

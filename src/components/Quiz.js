@@ -1,6 +1,9 @@
 import React from "react";
+
 import Question from "./Question.js";
 import Button from "./Button.js"
+
+import {correctResult, incorrectResult} from '../helpers.js'
 
 class Quiz extends React.Component {
   state = {
@@ -69,12 +72,12 @@ checkAnswer = (e) => {
           {questionIndex, isAnswerSelected} = this.state,
            currentQuestion = questions[questionIndex],
            correctAnswer = currentQuestion.correctAnswer,
-           userAnswer = e.target.innerText,
-           lists = document.querySelectorAll("li")
-
+           userAnswer = e.target.innerText
+          
+          
     if(isAnswerSelected === false){
         if (userAnswer === correctAnswer) {
-            e.target.classList.add("correct");
+            correctResult(e.target)
             this.setState((prevState) => {
                 return {
                 ...this.state,
@@ -84,12 +87,7 @@ checkAnswer = (e) => {
                 };
             });
         } else {
-            e.target.classList.add("incorrect");
-            lists.forEach((list) => {
-                if (list.innerText === this.props.correctAnswer) {
-                    list.classList.add("correct");
-                }
-            })
+            incorrectResult(e.target, correctAnswer)
             this.setState({
                 ...this.state,
                 isAnswerSelected: true
