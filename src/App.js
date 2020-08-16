@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Quiz from './components/Quiz.js'
-import {quizzes} from './data/quizzes.js'
+import Quiz from 'components/Quiz/Quiz.js'
+import {quizzes} from 'data/quizzes'
 
 
 class App extends React.Component{

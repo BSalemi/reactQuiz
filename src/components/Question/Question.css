@@ -1,0 +1,16 @@
+.answer{
+    cursor: pointer;
+}
+
+.answerList{
+    width:85%;
+    text-align: left;
+    list-style-position: inside;
+}
+
+.questionsDiv{
+    text-align: center;
+    width: 85%;
+    margin: 0 auto;
+    max-width: 600px;
+}

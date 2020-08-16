@@ -10,7 +10,7 @@ it("it should add a class to the eventTargetElementDom", ()=>{
     expect(eventTargetElementDom.classList.add).toBeCalledWith(className)
    });
 
-it("it should add a class to the correctAnswer", ()=>{
+it("it should add a class to the correctAnswerElementDom", ()=>{
     const className = "correct"
     incorrectResult(eventTargetElementDom, correctAnswerElementDom);
     expect(correctAnswerElementDom.classList.add).toBeCalledWith(className)

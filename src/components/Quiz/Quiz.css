@@ -1,0 +1,12 @@
+.quizDiv{
+    text-align:center;
+}
+
+.correct {
+    border: green 2px solid;
+}
+  
+.incorrect {
+    border: red 2px solid;
+    text-decoration: line-through;
+}

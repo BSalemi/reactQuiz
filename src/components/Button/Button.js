@@ -1,6 +1,8 @@
 import React from 'react';
 
-import {getMessage} from '../data/messages.js'
+import {getMessage} from 'data/messages'
+
+import './Button.css'
 
 function Button(props){
     const {

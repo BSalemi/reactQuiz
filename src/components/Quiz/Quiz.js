@@ -1,9 +1,10 @@
 import React from "react";
 
-import Question from "./Question.js";
-import Button from "./Button.js"
+import Question from "../Question/Question.js";
+import Button from "../Button/Button.js"
+import {correctResult, incorrectResult} from '../../helpers.js'
 
-import {correctResult, incorrectResult} from '../helpers.js'
+import './Quiz.css'
 
 class Quiz extends React.Component {
   state = {
@@ -67,14 +68,13 @@ class Quiz extends React.Component {
   };
 
 
-checkAnswer = (e) => {
+  checkAnswer = (e) => {
     const {questions} = this.props,
           {questionIndex, isAnswerSelected} = this.state,
            currentQuestion = questions[questionIndex],
            correctAnswer = currentQuestion.correctAnswer,
            userAnswer = e.target.innerText
-          
-          
+
     if(isAnswerSelected === false){
         if (userAnswer === correctAnswer) {
             correctResult(e.target)
@@ -113,42 +113,31 @@ checkAnswer = (e) => {
       });
     }
 
-    retakeQuiz = () => {
-        this.props.updateQuizAttempts()
-        this.setState({
-                questionIndex: 0,
-                isAnswerSelected: false,
-                questionsCorrect: 0,
-                isCorrect: false,
-                shuffledAnswers: []
-        })
-    }
-
-  removeClasses = (lists) => {
-    lists.forEach((list) => {
-        if (list.classList.contains("correct")) {
-            list.classList.remove("correct");
-        }
-        if(list.classList.contains("incorrect")){
-            list.classList.remove("incorrect")
-        }
+  retakeQuiz = () => {
+    this.props.updateQuizAttempts()
+    this.setState({
+      questionIndex: 0,
+      isAnswerSelected: false,
+      questionsCorrect: 0,
+      isCorrect: false,
+      shuffledAnswers: []
     })
   }
 
   getSummary(){
-      const {questions} = this.props,
-            {questionsCorrect} = this.state,
-            numberOfQuestions = questions.length
+    const {questions} = this.props,
+          {questionsCorrect} = this.state,
+          numberOfQuestions = questions.length
 
-      return `You got ${questionsCorrect} of ${numberOfQuestions} right.`
+    return `You got ${questionsCorrect} of ${numberOfQuestions} right.`
   }
 
 
-toggleVisibility = () =>{
+  toggleVisibility = () =>{
     let questionsDiv = document.querySelector(".questionsDiv")
 
     questionsDiv.hasAttribute("id") ? questionsDiv.removeAttribute("id") : questionsDiv.id = 'hidden'
-}
+  }
 
 
   render() {
